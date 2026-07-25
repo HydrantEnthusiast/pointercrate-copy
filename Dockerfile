@@ -18,4 +18,4 @@ COPY --from=builder /app/pointercrate-user-pages/static /app/pointercrate-user-p
 COPY --from=builder /app/pointercrate-demonlist-pages/static /app/pointercrate-demonlist-pages/static
 ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
-CMD ["./pointercrate-example"]
+CMD sh -c "touch .env && echo \"$SECRET_KEY\" > .secret && ./pointercrate-example"
