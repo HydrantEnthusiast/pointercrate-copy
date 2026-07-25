@@ -2,11 +2,11 @@
 FROM rust:1-bookworm AS builder
 WORKDIR /app
 COPY . .
-RUN ls -la pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/ftl pointercrate-user-pages/static/ftl
+RUN find pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/ftl pointercrate-user-pages/static/ftl -type f | wc -l
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 RUN cargo build --release -p pointercrate-example
-RUN ls -la pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/ftl pointercrate-user-pages/static/ftl
+RUN find pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/ftl pointercrate-user-pages/static/ftl -type f | wc -l
 
 # --- Runtime stage ---
 FROM debian:bookworm-slim
