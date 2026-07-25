@@ -16,6 +16,7 @@ COPY --from=builder /app/target/release/pointercrate-example /app/pointercrate-e
 COPY --from=builder /app/pointercrate-core-pages/static /app/pointercrate-core-pages/static
 COPY --from=builder /app/pointercrate-user-pages/static /app/pointercrate-user-pages/static
 COPY --from=builder /app/pointercrate-demonlist-pages/static /app/pointercrate-demonlist-pages/static
+COPY --from=builder /app/pointercrate-example/static /app/pointercrate-example/static
 RUN find /app/pointercrate-core-pages/static/ftl /app/pointercrate-demonlist-pages/static/ftl /app/pointercrate-user-pages/static/ftl -type f | wc -l
 ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
