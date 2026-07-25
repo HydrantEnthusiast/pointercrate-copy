@@ -2,11 +2,11 @@
 FROM rust:1-bookworm AS builder
 WORKDIR /app
 COPY . .
-# sqlx needs a DB to check queries against at compile time — we pass this in as a
-# "build argument" from Render so it isn't hardcoded here.
+RUN ls -la pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/ftl pointercrate-user-pages/static/ftl
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 RUN cargo build --release -p pointercrate-example
+RUN ls -la pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/ftl pointercrate-user-pages/static/ftl
 
 # --- Runtime stage ---
 FROM debian:bookworm-slim
@@ -16,7 +16,6 @@ COPY --from=builder /app/target/release/pointercrate-example /app/pointercrate-e
 COPY --from=builder /app/pointercrate-core-pages/static /app/pointercrate-core-pages/static
 COPY --from=builder /app/pointercrate-user-pages/static /app/pointercrate-user-pages/static
 COPY --from=builder /app/pointercrate-demonlist-pages/static /app/pointercrate-demonlist-pages/static
-RUN ls -la /app/pointercrate-core-pages/static/ftl /app/pointercrate-demonlist-pages/static/ftl /app/pointercrate-user-pages/static/ftl
 ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
 CMD sh -c "touch .env && echo \"$ROCKET_SECRET_KEY\" > .secret && ./pointercrate-example"
