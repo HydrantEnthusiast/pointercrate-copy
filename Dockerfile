@@ -12,12 +12,11 @@ RUN find pointercrate-core-pages/static/ftl pointercrate-demonlist-pages/static/
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y ca-certificates libssl3 && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY --from=builder /app/target/release/pointercrate-example /app/pointercrate-example
+COPY --from=builder /app/target/release/pointercrate-example /app/bin/pointercrate-example
 COPY --from=builder /app/pointercrate-core-pages/static /app/pointercrate-core-pages/static
 COPY --from=builder /app/pointercrate-user-pages/static /app/pointercrate-user-pages/static
 COPY --from=builder /app/pointercrate-demonlist-pages/static /app/pointercrate-demonlist-pages/static
 COPY --from=builder /app/pointercrate-example/static /app/pointercrate-example/static
-RUN find /app/pointercrate-core-pages/static/ftl /app/pointercrate-demonlist-pages/static/ftl /app/pointercrate-user-pages/static/ftl -type f | wc -l
 ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
-CMD sh -c "touch .env && echo \"$ROCKET_SECRET_KEY\" > .secret && ./pointercrate-example"
+CMD sh -c "touch .env && echo \"$ROCKET_SECRET_KEY\" > .secret && ./bin/pointercrate-example"
